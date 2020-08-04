@@ -1,0 +1,46 @@
+{
+  "name": "htts-pwa",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "snyk": "^1.360.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.js --max-warnings 5",
+    "cypress:run": "cypress run --record --key=${CYPRESS_RECORD_KEY}",
+    "cypress:open": "cypress open",
+    "ci:cypress-run": "start-server-and-test start http://localhost:3000 cypress:run",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "cypress": "^4.9.0",
+    "react-scripts": "^3.4.0",
+    "start-server-and-test": "^1.11.0"
+  },
+  "snyk": true
+}

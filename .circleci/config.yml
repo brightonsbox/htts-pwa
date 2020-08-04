@@ -1,0 +1,49 @@
+version: 2.1
+
+orbs:
+  aws-s3: circleci/aws-s3@1.0.11
+  cypress: cypress-io/cypress@1.23.0
+  snyk: snyk/snyk@0.0.8
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12.9.1-browsers 
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run: npm install && npm run build
+
+      - save_cache:
+          paths:
+            - node_modules
+            - ~/.npm 
+            - ~/.cache
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: npm run lint
+
+      - run: npm run test
+
+      - run: npm run ci:cypress-run
+
+      - snyk/scan:
+          fail-on-issues: false
+          monitor-on-build: false
+          severity-threshold: high
+
+      - aws-s3/sync:
+          from: build
+          to: s3://www.hotterthanthesahara.com
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
